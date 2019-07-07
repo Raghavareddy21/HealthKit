@@ -40,3 +40,10 @@ class DoctorResponse(models.Model):
 	date=models.DateField()
 	def __int_(self):
 		return self.id
+class MedicalCamp(models.Model):
+	Creator=models.ForeignKey(UserDetails,on_delete=models.CASCADE,related_name='patient')
+	numberOfPeopleIll=models.IntegerField(validators=[MaxValueValidator(999999)],verbose_name="Ill People")
+	address=models.TextField()
+	date=models.DateField()
+	def __str__(self):
+		return self.Creator.username

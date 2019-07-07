@@ -16,3 +16,7 @@ class DoctorResponse(forms.ModelForm):
 	class Meta:
 		model = DoctorResponse
 		fields=('doctor','patient','request','Solution','date')
+class MedicalCamp(forms.ModelForm):
+	class Meta:
+		model = MedicalCamp
+		fields = ('Creator','numberOfPeopleIll','address','date')

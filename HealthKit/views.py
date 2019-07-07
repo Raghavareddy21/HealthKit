@@ -4,6 +4,8 @@ from . models import *
 from django.http import HttpResponse
 from . forms import PatientRequest
 from  .models import PatientRequest as preq
+from . models import UserDetails as UserDetails
+from . models import MedicalCamp as MedicalCamp
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,logout,login as auth_login
 def patientSignup(request):
@@ -85,4 +87,33 @@ def doctorList(request,pk):
 		doctor=models.UserDetails.objects.get(pk=pk)
 		return render(request, 'HealthKit/doctorList.html',{'doctor':doctor})
 	else:
-		return HttpResponse("you need to login to access books")
+		return HttpResponse("you need to login to access doctorList")
+def MedicalCamp(request):
+	if request.user.is_authenticated:
+		if request.method=='POST':
+			form=forms.MedicalCamp(request.POST)
+			if form.is_valid():
+				form.save()
+				return render(request,'HealthKit/MedicalCamps.html')
+			else:
+				return render(request,'HealthKit/MedicalCamp.html')
+		else:
+			form=PatientRequest()
+			return render(request,'HealthKit/MedicalCamp.html',{'form':form})
+	else:
+		return HttpResponse("You need to login as patient to add request")
+def MedicalCamps(request):
+	if request.user.is_authenticated:
+		MedicalCamps=MedicalCamp.objects.all()
+		return render(request, 'HealthKit/MedicalCamps.html',{'MedicalCamps':MedicalCamps})
+	else:
+		return HttpResponse("you need to login to access MedicalCamps")
+def DoctorsList(request):
+	if request.user.is_authenticated:
+		Doctors=UserDetails.objects.all()
+		Doc=UserDetails.objects.filter(UserDetails.is_doctor==True)
+		return render(request,'HealthKit/doctorsList.html',{'Doc':Doctors})
+	else:
+		return HttpResponse("you need to login to access DoctorsList")
+def Knowledge(request):
+	return render(request,'HealthKit/Knowledge.html')
